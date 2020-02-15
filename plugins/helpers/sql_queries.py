@@ -140,7 +140,7 @@ class SqlQueries:
             date
             ,average_temperature as temperature
             ,country
-            ,year
+            ,extract(year FROM date) as year
         FROM _stg_temperature
     """)
 
