@@ -1,0 +1,17 @@
+
+World temperature Data
+
+1. migrate in raw data the country field
+2. clean the city field utf8 
+3. convert the country field into iso_country
+3. convert the city field into iso_city
+
+Airport Data
+1. migrate in raw data the country, state, airport_name, airport_code
+2. include city
+3. convert region into full-text
+!!! no link between immmigration data, only the country
+
+Immigration Data
+1. convert SAS date_arrival into ISO date
+2. convert country field into iso_country
