@@ -7,10 +7,8 @@ from airflow.models import Variable, XCom
 
 from airflow.operators.python_operator import PythonOperator
 from airflow.operators.dummy_operator import DummyOperator
-from airflow.operators import (StageToRedshiftOperator
-                        ,LoadFactOperator
-                        ,LoadDimensionOperator
-                        ,DataQualityOperator) 
+from airflow.operators import (StageToRedshiftOperator ,LoadFactOperator
+                        ,LoadDimensionOperator ,DataQualityOperator) 
 
 
 from helpers import SqlQueries
@@ -26,7 +24,7 @@ default_args = {
 }
 
 dag = DAG(
-    "s3_to_redshift.v16",
+    "s3_to_redshift.v17",
     default_args=default_args,
     description='S3 data to Redshift',
     schedule_interval='@monthly')

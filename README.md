@@ -9,10 +9,9 @@ The ETL pipeline was build to  to provide *__exploratory__* data in order to ana
 - __*Exploratory*__ in nature, the data can be used to support or refute the research questions, general objectives, or business questions of the end-users.
 
 #### 4. Possible Business Questions
-- How much does immigration contribute to population growth in a certain place?
 - Is the immigration pattern driven by weather changes?
 - What primary destination country/state of the immigrants?
-- Does weather affect the population density of the certain area?
+- What is the weather among th edestination country/state of the immigrants?
 
 #### 3. Applicable SQL Queries
 - How many people move in the certain place in a given year?
