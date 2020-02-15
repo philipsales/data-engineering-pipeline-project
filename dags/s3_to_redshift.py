@@ -26,7 +26,7 @@ default_args = {
 }
 
 dag = DAG(
-    "s3_to_redshift.v13",
+    "s3_to_redshift.v16",
     default_args=default_args,
     description='S3 data to Redshift',
     schedule_interval='@monthly')
@@ -118,15 +118,51 @@ load_time_dimension_table = LoadDimensionOperator(
     truncate_data=True
 )
 
-run_data_quality_checks = DataQualityOperator(
-    task_id='Run_data_quality_checks',
+run_data_check_time = DataQualityOperator(
+    task_id='Run_data_check_time',
     dag=dag,
     redshift_conn_id="redshift",
-    table="_dim_time",
+    table="_dm_time",
     pass_value=0,
     sql_stmt=SqlQueries.count_query.format(
         "arrival_date",
-        "_dim_time"
+        "_dm_time"
+    )
+)
+
+run_data_check_temperature = DataQualityOperator(
+    task_id='Run_data_check_temperature',
+    dag=dag,
+    redshift_conn_id="redshift",
+    table="_dm_temperature",
+    pass_value=0,
+    sql_stmt=SqlQueries.count_query.format(
+        "date",
+        "_dm_temperature"
+    )
+)
+
+run_data_check_immigrant = DataQualityOperator(
+    task_id='Run_data_check_immigrant',
+    dag=dag,
+    redshift_conn_id="redshift",
+    table="_dm_immigrant",
+    pass_value=0,
+    sql_stmt=SqlQueries.count_query.format(
+        "admission_nbr",
+        "_dm_immigrant"
+    )
+)
+
+run_data_check_airport = DataQualityOperator(
+    task_id='Run_data_check_airport',
+    dag=dag,
+    redshift_conn_id="redshift",
+    table="_dm_airport",
+    pass_value=0,
+    sql_stmt=SqlQueries.count_query.format(
+        "airport_code",
+        "_dm_airport"
     )
 )
 
@@ -145,8 +181,12 @@ load_immigration_fact_table >> [
     load_temperature_dimension_table,
     load_time_dimension_table,
     load_airport_dimension_table,
-    load_immigrant_dimension_table
-    ]  >> run_data_quality_checks
+    load_immigrant_dimension_table ]  
 
+load_temperature_dimension_table >> run_data_check_temperature
+load_time_dimension_table >> run_data_check_time
+load_airport_dimension_table >> run_data_check_airport
+load_immigrant_dimension_table >> run_data_check_immigrant
 
-run_data_quality_checks >> end_operator
+[ run_data_check_temperature, run_data_check_time, 
+  run_data_check_airport, run_data_check_immigrant ] >> end_operator
